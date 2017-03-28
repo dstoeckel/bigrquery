@@ -73,7 +73,7 @@ schema_fields <- function(data) {
 data_type <- function(x) {
   if (is.factor(x)) return("STRING")
   if (inherits(x, "POSIXt")) return("TIMESTAMP")
-  if (inherits(x, "Date")) return("TIMESTAMP")
+  if (inherits(x, "Date")) return("DATE")
 
   switch(typeof(x),
          character = "STRING",
@@ -98,7 +98,7 @@ standard_csv <- function(values) {
   values[is_time] <- lapply(values[is_time], as.numeric)
 
   is_date <- vapply(values, function(x) inherits(x, "Date"), logical(1))
-  values[is_date] <- lapply(values[is_date], function(x) as.numeric(as.POSIXct(x)))
+  values[is_date] <- lapply(values[is_date], as.character)
 
   tmp <- tempfile(fileext = ".csv")
   on.exit(unlink(tmp))
